@@ -8,12 +8,14 @@
 </form>
 </div>
 <div>
-    <form method="post" action="ad">
+    <form method="post" enctype="multipart/form-data" action="ad">
         <input type="text" name="text" placeholder="Enter message" />
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         <input type="text" name="tag" placeholder="Tag">
+        <input type="file" name="file">
         <button type="submit">ADD</button>
     </form>
+
 </div>
 
 {{#messages}}
@@ -22,6 +24,7 @@
         <span>{{text}}</span>
         <i>{{tag}}</i>
         <strong>{{authorName}}</strong>
+
     </div>
 {{/messages}}
 </body>
