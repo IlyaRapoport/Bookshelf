@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>List of users</div>
+{{#users}}
+    <div>
+        Name: {{username}}
+        Role: {{roles}}
+        <a href="/user/{{id}}">edit</a>
+    </div>
+{{/users}}
+<a href="/main">Main Page</a>
+</body>
+</html>
