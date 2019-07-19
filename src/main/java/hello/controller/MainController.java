@@ -75,7 +75,7 @@ public class MainController {
     @PostMapping("ad")
     public String ad(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String text, @AuthenticationPrincipal User user, @RequestParam String tag, Map<String, Object> model) throws IOException {
         Message message = new Message(id, text, tag, user);
-        if (file != null) {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();

@@ -14,7 +14,8 @@
         <span>Message is: {{id}} {{text}} {{tag}}</span>
 
     </div>
-   <div> <img src="/upload/{{filename}}"></div>
+  {{#filename}} <div> <img class="photo" width="200" src="/upload/{{filename}}"></div>
+  {{/filename}}{{^filename}}{{/filename}}
 {{/messages}}
     <div> <form method="post" action="upd">
 

@@ -1,32 +1,53 @@
 <html>
+<head>
+    <style>
+            @import "/static/style.css";
+    </style>
 
-<body>
-<div>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <input type="submit" value="Sign Out"/>
-</form>
-</div>
+</head>
+<body><table >
 
-<div>Message list</div>
-<form method="post" action="filter">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <input type="text" name="filter">
-    <button type="submit">Find</button>
-</form>
-{{#messages}}
-    <div>
-<!--        <b>{{id}}</b>-->
-        <span><a href="/message/{{id}}">{{text}}</a>
-<!--        <input type="text" name="text" placeholder="{{text}}"/>-->
+    <tr>
+        <td><ul>
+            <li><a href="/add">Add Message</a></li>
+            <li><a href="/delete">Delete Message</a></li>
+            <li><a href="/user">User list</a></li>
+        </ul></td>
 
-        </span>
-<!--        <i>{{tag}}</i>-->
-<!--        <strong>{{authorName}}</strong>-->
-    </div>
-{{/messages}}
-<a href="/add">Add Message</a><br>
-<a href="/delete">Delete Message</a><br>
-<a href="/user">User list</a><br>
+        <td><form method="post" action="filter">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <input type="text" name="filter">
+            <button type="submit">Find</button>
+        </form></td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post" >
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input  type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+<td><tr>
+    <h1>Message list</h1>
+</tr>
+</td>
+    <td><tr>
+        {{#messages}}
+            <ul>
+                <li><a href="/message/{{id}}">{{text}}</a><br></li>
+            </ul>
+        {{/messages}}
+        </tr>
+    </td>
+</table>
+
+
+
+
+
+
+
+<br>
 </body>
 </html>

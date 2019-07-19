@@ -17,7 +17,9 @@ private String uploadPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/upload/**")
+        registry.addResourceHandler("/**")
                 .addResourceLocations("file//"+uploadPath+"/");
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 }
