@@ -1,22 +1,28 @@
 package hello.controller;
 
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import hello.domain.Message;
+import hello.domain.Role;
 import hello.domain.User;
 import hello.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Id;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.sql.*;
+import java.util.Scanner;
 
 @Controller
 public class MainController {
@@ -31,13 +37,19 @@ public class MainController {
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
 
-        return "greeting";
+        return "redirect:/main";
     }
 
     @GetMapping("/delete")
-    public String delete(Map<String, Object> model) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String delete(@AuthenticationPrincipal User user, Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
         model.put("messages", messages);
+        for (Role key : user.getRoles()) {
+            if (key.getAuthority().contains("ADMIN")) {
+                model.put("user", user);
+            }
+        }
         return "delete";
     }
 
@@ -49,9 +61,16 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model) {
+    public String main(@AuthenticationPrincipal User user, Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
         model.put("messages", messages);
+
+        for (Role key : user.getRoles()) {
+            if (key.getAuthority().contains("ADMIN")) {
+                model.put("user", user);
+            }
+        }
+
         return "main";
     }
 
@@ -63,11 +82,17 @@ public class MainController {
     }
 
     @GetMapping("/message/{id}")
-    public String message(@PathVariable Integer id, Map<String, Object> model) {
+    public String message(@AuthenticationPrincipal User user, @PathVariable Integer id, Map<String, Object> model) {
         Iterable<Message> messages;
         messages = messageRepo.findById(id);
         model.put("messages", messages);
         messagesToEdit = (List<Message>) messages;
+
+        for (Role key : user.getRoles()) {
+            if (key.getAuthority().contains("ADMIN")) {
+                model.put("user", user);
+            }
+        }
         return "message";
 
     }
@@ -92,7 +117,7 @@ public class MainController {
     }
 
     @PostMapping("filter")
-    public String filter(@RequestParam String filter, Map<String, Object> model) {
+    public String filter(@AuthenticationPrincipal User user, @RequestParam String filter, Map<String, Object> model) {
         Iterable<Message> messages;
         if (filter != null && !filter.isEmpty()) {
             messages = messageRepo.findByText(filter);
@@ -100,6 +125,11 @@ public class MainController {
             messages = messageRepo.findAll();
         }
         model.put("messages", messages);
+        for (Role key : user.getRoles()) {
+            if (key.getAuthority().contains("ADMIN")) {
+                model.put("user", user);
+            }
+        }
         return "main";
     }
 
@@ -117,7 +147,7 @@ public class MainController {
     }
 
     @PostMapping("message/upd")
-    public String upd(@AuthenticationPrincipal Integer id, @RequestParam String text, @AuthenticationPrincipal User user, @RequestParam String tag, Map<String, Object> model) {
+    public String upd(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String text, @AuthenticationPrincipal User user, @RequestParam String tag, Map<String, Object> model) throws IOException {
 
         //  Message message = new Message(id,text, tag, user);
         if (text != null && !text.isEmpty()) {
@@ -126,7 +156,17 @@ public class MainController {
         if (tag != null && !tag.isEmpty()) {
             messagesToEdit.get(0).setTag(tag);
         }
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
 
+            messagesToEdit.get(0).setFilename(resultFileName);
+        }
         messageRepo.saveAll(messagesToEdit);
 
         return "redirect:/main";

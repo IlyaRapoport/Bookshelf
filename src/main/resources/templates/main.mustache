@@ -3,49 +3,55 @@
     <style>
             @import "/static/style.css";
     </style>
-
+<meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
 </head>
-<body><table >
+<body id="intro">
+<table>
 
     <tr>
-        <td><ul>
-            <li><a href="/add">Add Message</a></li>
-            <li><a href="/delete">Delete Message</a></li>
-            <li><a href="/user">User list</a></li>
-        </ul></td>
+        <td>
+            <ul>
+                <li><a href="/add">Add Message</a></li>
+                {{#user}}
+                    <li><a href="/delete">Delete Message</a></li>{{/user}}
+                {{^user}}{{/user}}
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+            </ul>
+        </td>
 
-        <td><form method="post" action="filter">
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-            <input type="text" name="filter">
-            <button type="submit">Find</button>
-        </form></td>
+        <td>
+            <form method="post" action="filter">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <input type="text" name="filter">
+                <button type="submit">Find</button>
+            </form>
+        </td>
         <td>
             <div align="right">
-                <form action="/logout" method="post" >
+                <form action="/logout" method="post">
                     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-                    <input  type="submit" value="Sign Out"/>
+                    <input type="submit" value="Sign Out"/>
                 </form>
             </div>
         </td>
     </tr>
-<td><tr>
-    <h1>Message list</h1>
-</tr>
-</td>
-    <td><tr>
-        {{#messages}}
-            <ul>
-                <li><a href="/message/{{id}}">{{text}}</a><br></li>
-            </ul>
-        {{/messages}}
+
+    <tr>
+        <td>
+            <h1>List of books</h1>
+
+        </td>
+    </tr>
+    {{#messages}}
+        <tr>
+            <td><a href="/message/{{id}}">{{text}}</a>
+            </td>
         </tr>
-    </td>
+    {{/messages}}
 </table>
-
-
-
-
-
 
 
 <br>

@@ -1,10 +1,10 @@
 <style>
     body {
-        background-color: #E3DFDF;
+        background-color: #56CBB0;
         color: azure;
         font-size: 1.1em;
     }
-    h1 {background-color: #56CBB0;
+    h1 {background-color: #CBDCD8;
               width:100%;
                                  border: none;
                                  color: black;
@@ -15,7 +15,7 @@
                                  font-size: 25px;
     }
     #intro {
-        font-size: 1.3em;
+         background-color: #CBDCD8;
     }
     .colorful {
         color: orange;
@@ -25,9 +25,9 @@
        color: blue;
     }
     button {
-background-color: #56CBB0;
+background-color: #CBDCD8;
       border: none;
-      color: white;
+      color: black;
       padding: 15px 32px;
       text-align: center;
       text-decoration: none;
@@ -55,7 +55,7 @@ background-color: #56CBB0;
                 font-size: 16px;
                       }
       table{
-      background-color: #56CBB0;
+      background-color: #CBDCD8;
       width:100%;
                          border: none;
                          color: white;
