@@ -12,10 +12,8 @@
     <tr>
         <td>
             <ul>
-                <li><a href="/add">Add Message</a></li>
-                {{#user}}
-                    <li><a href="/delete">Delete Message</a></li>{{/user}}
-                {{^user}}{{/user}}
+                <li><a href="/add">Add Book</a></li>
+
                 {{#user}}
                     <li><a href="/user">User list</a></li>{{/user}}
                 {{^user}}{{/user}}
@@ -47,7 +45,7 @@
     </tr>
     {{#messages}}
         <tr>
-            <td><a href="/message/{{id}}">{{text}}</a>
+            <td><a href="/message/{{id}}">{{bookName}}</a>
             </td>
         </tr>
     {{/messages}}

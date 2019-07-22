@@ -11,23 +11,23 @@
 <div>Message list</div>
 
 <!--<form method="get" action="del">-->
-<!--    <input type="text" name="text" placeholder="Enter message" />-->
+<!--    <input type="bookName" name="bookName" placeholder="Enter message" />-->
 <!--    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
-<!--    <input type="text" name="tag" placeholder="Tag">-->
+<!--    <input type="bookName" name="bookAuthor" placeholder="Tag">-->
 <!--    <button type="submit">Remove</button>-->
 <!--</form>-->
 
 <form method="post" action="del">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <input type="text" name="filter" placeholder="Id">
+    <input type="bookName" name="filter" placeholder="Id">
     <button type="submit">Remove</button>
 
 </form>
 {{#messages}}
     <div>
         <b>{{id}}</b>
-        <span>{{text}}</span>
-        <i>{{tag}}</i>
+        <span>{{bookName}}</span>
+        <i>{{bookAuthor}}</i>
         <strong>{{authorName}}</strong>
     </div>
 {{/messages}}

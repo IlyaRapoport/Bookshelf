@@ -1,14 +1,12 @@
-package hello.controller;
+package Bookshelf.controller;
 
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import hello.domain.Message;
-import hello.domain.Role;
-import hello.domain.User;
-import hello.repos.MessageRepo;
+import Bookshelf.domain.Books;
+import Bookshelf.domain.Role;
+import Bookshelf.domain.User;
+import Bookshelf.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,8 +19,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.sql.*;
-import java.util.Scanner;
 
 @Controller
 public class MainController {
@@ -30,7 +26,7 @@ public class MainController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    List<Message> messagesToEdit;
+    List<Books> messagesToEdit;
     @Autowired
     private MessageRepo messageRepo;
 
@@ -43,7 +39,7 @@ public class MainController {
     @GetMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String delete(@AuthenticationPrincipal User user, Map<String, Object> model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Books> messages = messageRepo.findAll();
         model.put("messages", messages);
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
@@ -55,14 +51,14 @@ public class MainController {
 
     @GetMapping("/update")
     public String update(Map<String, Object> model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Books> messages = messageRepo.findAll();
         model.put("messages", messages);
         return "update";
     }
 
     @GetMapping("/main")
     public String main(@AuthenticationPrincipal User user, Map<String, Object> model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Books> messages = messageRepo.findAll();
         model.put("messages", messages);
 
         for (Role key : user.getRoles()) {
@@ -76,18 +72,21 @@ public class MainController {
 
     @GetMapping("/add")
     public String add(Map<String, Object> model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Books> messages = messageRepo.findAll();
         model.put("messages", messages);
         return "add";
     }
 
     @GetMapping("/message/{id}")
     public String message(@AuthenticationPrincipal User user, @PathVariable Integer id, Map<String, Object> model) {
-        Iterable<Message> messages;
+        Iterable<Books> messages;
         messages = messageRepo.findById(id);
         model.put("messages", messages);
-        messagesToEdit = (List<Message>) messages;
 
+
+        messagesToEdit = (List<Books>) messages;
+        messages = messageRepo.findAll();
+        model.put("messages2", messages);
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
                 model.put("user", user);
@@ -98,8 +97,8 @@ public class MainController {
     }
 
     @PostMapping("ad")
-    public String ad(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String text, @AuthenticationPrincipal User user, @RequestParam String tag, Map<String, Object> model) throws IOException {
-        Message message = new Message(id, text, tag, user);
+    public String ad(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, Map<String, Object> model) throws IOException {
+        Books message = new Books(id, bookName, bookAuthor, user);
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -111,16 +110,16 @@ public class MainController {
             message.setFilename(resultFileName);
         }
         messageRepo.save(message);
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Books> messages = messageRepo.findAll();
         model.put("messages", messages);
-        return "main";
+        return "redirect:/main";
     }
 
     @PostMapping("filter")
     public String filter(@AuthenticationPrincipal User user, @RequestParam String filter, Map<String, Object> model) {
-        Iterable<Message> messages;
+        Iterable<Books> messages;
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByText(filter);
+            messages = messageRepo.findByBookName(filter);
         } else {
             messages = messageRepo.findAll();
         }
@@ -133,11 +132,11 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping("del")
-    public String del(@RequestParam Integer filter, Map<String, Object> model) {
-        Iterable<Message> messages;
-        if (filter != null) {
-            messages = messageRepo.findById(filter);
+    @PostMapping("message/del")
+    public String del(@AuthenticationPrincipal Integer id, Map<String, Object> model) {
+        Iterable<Books> messages;
+        if (messagesToEdit.get(0).getId() != null) {
+            messages = messageRepo.findById(messagesToEdit.get(0).getId());
             messageRepo.deleteAll(messages);
         } else {
             messages = messageRepo.findAll();
@@ -147,14 +146,14 @@ public class MainController {
     }
 
     @PostMapping("message/upd")
-    public String upd(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String text, @AuthenticationPrincipal User user, @RequestParam String tag, Map<String, Object> model) throws IOException {
+    public String upd(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, Map<String, Object> model) throws IOException {
 
-        //  Message message = new Message(id,text, tag, user);
-        if (text != null && !text.isEmpty()) {
-            messagesToEdit.get(0).setText(text);
+        if (bookName != null && !bookName.isEmpty()) {
+
+            messagesToEdit.get(0).setBookName(bookName);
         }
-        if (tag != null && !tag.isEmpty()) {
-            messagesToEdit.get(0).setTag(tag);
+        if (bookAuthor != null && !bookAuthor.isEmpty()) {
+            messagesToEdit.get(0).setBookAuthor(bookAuthor);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -166,6 +165,17 @@ public class MainController {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
 
             messagesToEdit.get(0).setFilename(resultFileName);
+        }
+        messageRepo.saveAll(messagesToEdit);
+
+        return "redirect:/main";
+    }
+    @PostMapping("message/updselect")
+    public String updSelect(@RequestParam String bookAuthor){
+
+
+        if (bookAuthor != null && !bookAuthor.isEmpty()) {
+            messagesToEdit.get(0).setBookAuthor(bookAuthor);
         }
         messageRepo.saveAll(messagesToEdit);
 

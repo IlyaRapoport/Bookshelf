@@ -1,8 +1,8 @@
-package hello.controller;
+package Bookshelf.controller;
 
-import hello.domain.Role;
-import hello.domain.User;
-import hello.repos.UserRepo;
+import Bookshelf.domain.Role;
+import Bookshelf.domain.User;
+import Bookshelf.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

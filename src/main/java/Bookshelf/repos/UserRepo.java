@@ -1,6 +1,6 @@
-package hello.repos;
+package Bookshelf.repos;
 
-import hello.domain.User;
+import Bookshelf.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepo extends JpaRepository<User, Long> {

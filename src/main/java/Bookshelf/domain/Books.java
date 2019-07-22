@@ -1,20 +1,20 @@
-package hello.domain;
+package Bookshelf.domain;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 
 @Entity
-public class Message {
+public class Books {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String text;
-    private String tag;
+    private String bookName;
+    private String bookAuthor;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_id")
     private User author;
     private String filename;
+    private String fileForDownload;
 
     public String getFilename() {
         return filename;
@@ -35,14 +35,14 @@ public class Message {
     }
 
 
-    public Message() {
+    public Books() {
     }
 
-    public Message(Integer id, String text, String tag, User user) {
+    public Books(Integer id, String bookName, String bookAuthor, User user) {
         this.id = id;
         this.author = user;
-        this.text = text;
-        this.tag = tag;
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
     }
 
 
@@ -50,12 +50,12 @@ public class Message {
         return author != null ? author.getUsername() : "<none>";
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
-    public String getText() {
-        return text;
+    public String getBookName() {
+        return bookName;
     }
 
     public Integer getId() {
@@ -66,11 +66,19 @@ public class Message {
         this.id = id;
     }
 
-    public String getTag() {
-        return tag;
+    public String getBookAuthor() {
+        return bookAuthor;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setBookAuthor(String bookAuthor) {
+        this.bookAuthor = bookAuthor;
+    }
+
+    public String getFileForDownload() {
+        return fileForDownload;
+    }
+
+    public void setFileForDownload(String fileForDownload) {
+        this.fileForDownload = fileForDownload;
     }
 }

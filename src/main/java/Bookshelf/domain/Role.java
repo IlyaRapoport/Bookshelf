@@ -1,4 +1,4 @@
-package hello.domain;
+package Bookshelf.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
