@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>Spring Security Example </title>
+    <style>
+            @import "/static/style.css";
+
+
+    </style>
+    <meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
 </head>
-<body>
-Login page
-<form action="/login" method="post">
-    <div><label> User Name : <input type="bookName" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
+<body id="intro">
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/registration">Add new user</a></li>
+                <li><a href="/add">Add Book</a></li>
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+                <li><a href="/main">Back</a><br></li>
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+
+        </td>
+    </tr>
+</table>
+
+<h1>Login page</h1>
+<form action="/login" method="post" >
+    <div align="left"><label> User Name:&nbsp; <input type="bookName" name="username"/> </label></div>
+    <div align="left"><label> Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" name="password"/> </label></div>
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <div><input type="submit" value="Sign In"/></div>
 </form>
-<a href="/registration">Add new user</a>
 </body>
 </html>

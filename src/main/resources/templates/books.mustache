@@ -1,0 +1,149 @@
+<html>
+<head>
+    <style>
+            @import "/static/style.css";
+
+
+    </style>
+    <meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
+</head>
+<body id="intro">
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/add">Add Book</a></li>
+
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+                <li><a href="/main">Back</a><br></li>
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{{#books}}
+    {{#user}}<h1>Edit book</h1>{{/user}}
+{{^user}}{{/user}}
+
+    <table>
+        {{#user}} <form method="post" action="upd" enctype="multipart/form-data">{{/user}}
+        {{^user}}{{/user}}
+        <td width="220"  rowspan="6" valign="top" >
+            {{#filename}}
+            <img width="200" src="/upload/{{filename}}">
+        {{/filename}}{{^filename}}{{/filename}}
+        </td>
+        <tr>
+            <td><h0>Book's name:</h0>
+            </td>
+            <td>
+                <h0>{{bookName}}</h0>
+            </td>
+            <td>
+               {{#user}} <input type="text" name="bookName" placeholder="{{bookName}}"/>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>{{/user}}
+{{^user}}{{/user}}
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h0>Book's author:</h0>
+            </td>
+            <td><h0>{{bookAuthor}}</h0>
+            </td>
+            <td>{{#user}}<input type="text" name="bookAuthor" placeholder={{bookAuthor}}>{{/user}}
+{{^user}}{{/user}}
+            </td>
+            <td>{{#user}}<select name="bookAuthorSelect">{{#books2}}
+                <option value="{{bookAuthor}}">{{bookAuthor}}</option>
+
+            {{/books2}}
+            </select>{{/user}}
+{{^user}}{{/user}}
+            </td>
+        </tr>
+        <tr>
+            <td><h0>Book's Description:</h0>
+            </td>
+            <td> <h0>{{bookDescription}}</h0>
+            </td>
+            <td>{{#user}}<input type="text" name="bookDescription" placeholder={{bookDescription}}>{{/user}}
+{{^user}}{{/user}}
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>{{#user}}<input type="file" name="file">{{/user}}
+{{^user}}{{/user}}
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>{{#user}}<button type="submit">Edit</button>
+        </form>{{/user}}
+{{^user}}{{/user}}
+            </td>
+            <td>{{#user}}<form method="post" action="del">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <button type="submit">Remove</button>
+
+            </form>{{/user}}
+{{^user}}{{/user}}
+            </td>
+        </tr>
+    </table>
+
+{{#comments}}
+    <table border="1" >
+        <tr>
+            <td>  {{#CommentsAuthor}}
+               <h0> {{CommentsAuthor}}</h0>
+                {{/CommentsAuthor}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+               <h0> {{comments}}</h0>
+            </td>
+        </tr>
+    </table>
+
+{{/comments}}
+    <form method="post" action="comments">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <textarea name="comments" placeholder="ADD comments"></textarea><br>
+        <button type="submit">ADD comments</button>
+    </form>
+{{/books}}
+
+</body>
+</html>

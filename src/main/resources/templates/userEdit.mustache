@@ -1,10 +1,41 @@
-<!DOCTYPE HTML>
+<html>
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="bookName/html; charset=UTF-8"/>
+    <style>
+            @import "/static/style.css";
+
+    </style>
+    <meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
 </head>
-<body>
-<div>User Editor</div>
+<body id="intro">
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/add">Add Book</a></li>
+
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+                <li><a href="/main">Back</a><br></li>
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr></table>
+
+<div><h1>User Editor</h1></div>
 
 <form action="/user" method="post">
     <input type="bookName" name="username" value="{{user.username}}">
@@ -17,7 +48,5 @@
     <button type="submit">Save</button>
 </form>
 
-
-<a href="/main">Main Page</a>
 </body>
 </html>

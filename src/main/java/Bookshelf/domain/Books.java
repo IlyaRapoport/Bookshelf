@@ -9,7 +9,37 @@ public class Books {
     private Integer id;
 
     private String bookName;
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    private String comments;
     private String bookAuthor;
+
+    public String getCommentsAuthor() {
+        return commentsAuthor;
+    }
+
+    public void setCommentsAuthor(String commentsAuthor) {
+        this.commentsAuthor = commentsAuthor;
+    }
+
+    private String commentsAuthor;
+    public String getBookDescription() {
+        return bookDescription;
+    }
+
+    public void setBookDescription(String bookDescription) {
+        this.bookDescription = bookDescription;
+    }
+
+    private String bookDescription;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_id")
     private User author;
@@ -38,11 +68,13 @@ public class Books {
     public Books() {
     }
 
-    public Books(Integer id, String bookName, String bookAuthor, User user) {
+    public Books(Integer id, String bookName, String bookAuthor, User user, String bookDescription) {
         this.id = id;
         this.author = user;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
+        this.bookDescription =bookDescription;
+
     }
 
 
