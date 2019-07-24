@@ -7,29 +7,11 @@ public class Books {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     private String bookName;
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    private String comments;
     private String bookAuthor;
+    private String bookDescription;
 
-    public String getCommentsAuthor() {
-        return commentsAuthor;
-    }
 
-    public void setCommentsAuthor(String commentsAuthor) {
-        this.commentsAuthor = commentsAuthor;
-    }
-
-    private String commentsAuthor;
     public String getBookDescription() {
         return bookDescription;
     }
@@ -38,7 +20,6 @@ public class Books {
         this.bookDescription = bookDescription;
     }
 
-    private String bookDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_id")
@@ -53,7 +34,6 @@ public class Books {
     public void setFilename(String filename) {
         this.filename = filename;
     }
-
 
 
     public User getAuthor() {
@@ -73,7 +53,7 @@ public class Books {
         this.author = user;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
-        this.bookDescription =bookDescription;
+        this.bookDescription = bookDescription;
 
     }
 

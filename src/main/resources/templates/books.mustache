@@ -4,6 +4,7 @@
             @import "/static/style.css";
 
 
+
     </style>
     <meta content="/upload/logo.jpg">
     <title>Bookshelf</title>
@@ -39,26 +40,28 @@
 
 {{#books}}
     {{#user}}<h1>Edit book</h1>{{/user}}
-{{^user}}{{/user}}
+    {{^user}}{{/user}}
 
     <table>
-        {{#user}} <form method="post" action="upd" enctype="multipart/form-data">{{/user}}
+        {{#user}}
+        <form method="post" action="upd" enctype="multipart/form-data">{{/user}}
         {{^user}}{{/user}}
-        <td width="220"  rowspan="6" valign="top" >
+        <td width="220" rowspan="6" valign="top">
             {{#filename}}
-            <img width="200" src="/upload/{{filename}}">
-        {{/filename}}{{^filename}}{{/filename}}
+                <img width="200" src="/upload/{{filename}}">
+            {{/filename}}{{^filename}}{{/filename}}
         </td>
         <tr>
-            <td><h0>Book's name:</h0>
+            <td>
+                <h0>Book's name:</h0>
             </td>
             <td>
                 <h0>{{bookName}}</h0>
             </td>
             <td>
-               {{#user}} <input type="text" name="bookName" placeholder="{{bookName}}"/>
-                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>{{/user}}
-{{^user}}{{/user}}
+                {{#user}} <input type="text" name="bookName" placeholder="{{bookName}}"/>
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>{{/user}}
+                {{^user}}{{/user}}
             </td>
             <td>
             </td>
@@ -67,26 +70,29 @@
             <td>
                 <h0>Book's author:</h0>
             </td>
-            <td><h0>{{bookAuthor}}</h0>
+            <td>
+                <h0>{{bookAuthor}}</h0>
             </td>
             <td>{{#user}}<input type="text" name="bookAuthor" placeholder={{bookAuthor}}>{{/user}}
-{{^user}}{{/user}}
+                {{^user}}{{/user}}
             </td>
             <td>{{#user}}<select name="bookAuthorSelect">{{#books2}}
                 <option value="{{bookAuthor}}">{{bookAuthor}}</option>
 
             {{/books2}}
             </select>{{/user}}
-{{^user}}{{/user}}
+                {{^user}}{{/user}}
             </td>
         </tr>
         <tr>
-            <td><h0>Book's Description:</h0>
+            <td>
+                <h0>Book's Description:</h0>
             </td>
-            <td> <h0>{{bookDescription}}</h0>
+            <td>
+                <h0>{{bookDescription}}</h0>
             </td>
             <td>{{#user}}<input type="text" name="bookDescription" placeholder={{bookDescription}}>{{/user}}
-{{^user}}{{/user}}
+                {{^user}}{{/user}}
             </td>
             <td>
             </td>
@@ -97,50 +103,61 @@
             <td>
             </td>
             <td>{{#user}}<input type="file" name="file">{{/user}}
-{{^user}}{{/user}}
+                {{^user}}{{/user}}
             </td>
             <td>
             </td>
         </tr>
-        <tr>
+    <tr>
 
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>{{#user}}<button type="submit">Edit</button>
-        </form>{{/user}}
-{{^user}}{{/user}}
-            </td>
-            <td>{{#user}}<form method="post" action="del">
+        <td>
+        </td>
+        <td>
+        </td>
+    <td>{{#user}}
+        <button type="submit">Edit</button>
+    </form>{{/user}}
+        {{^user}}{{/user}}
+        </td>
+        <td>{{#user}}
+            <form method="post" action="del">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
                 <button type="submit">Remove</button>
 
             </form>{{/user}}
-{{^user}}{{/user}}
-            </td>
+            {{^user}}{{/user}}
+        </td>
         </tr>
     </table>
 
-{{#comments}}
-    <table border="1" >
-        <tr>
-            <td>  {{#CommentsAuthor}}
-               <h0> {{CommentsAuthor}}</h0>
+    {{#comments}}
+        <table>
+
+                <td>  {{#CommentsAuthor}}
+                    <h0> {{CommentsAuthor}}</h0>
                 {{/CommentsAuthor}}
-            </td>
-        </tr>
-        <tr>
-            <td>
-               <h0> {{comments}}</h0>
-            </td>
-        </tr>
-    </table>
+                </td>
 
-{{/comments}}
+
+
+                <td>
+                    <h0> {{comments}}</h0>
+
+                </td>
+                <td>{{#user}}
+                    <form method="post" action="delcom">
+                        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                        <input type="hidden" name="bookId" value="{{id}}"/>
+                        <button type="submit">delete</button></form>{{/user}}
+                    {{^user}}{{/user}}</td>
+
+        </table>
+
+    {{/comments}}
     <form method="post" action="comments">
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <textarea name="comments" placeholder="ADD comments"></textarea><br>
+        <input type="hidden" name="id" value="{{id}}"/>
+        <textarea name="comments" placeholder="ADD comments"></textarea><br>
         <button type="submit">ADD comments</button>
     </form>
 {{/books}}

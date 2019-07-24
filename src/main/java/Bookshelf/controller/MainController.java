@@ -2,11 +2,14 @@ package Bookshelf.controller;
 
 
 import Bookshelf.domain.Books;
+import Bookshelf.domain.Comments;
 import Bookshelf.domain.Role;
 import Bookshelf.domain.User;
 import Bookshelf.repos.BookRepo;
+import Bookshelf.repos.CommentsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,8 +30,17 @@ public class MainController {
     private String uploadPath;
 
     List<Books> booksToEdit;
+    List<Comments> commentsToEdit;
     @Autowired
     private BookRepo bookRepo;
+    @Autowired
+    private CommentsRepo commentsRepo;
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public String accessDeniedException() {
+        return "redirect:/main";
+    }
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
@@ -83,8 +95,12 @@ public class MainController {
         book = bookRepo.findById(id);
         model.put("books", book);
 
+        Iterable<Comments> comments;
+        comments = commentsRepo.findByBookId(id);
+        model.put("comments", comments);
 
         booksToEdit = (List<Books>) book;
+        commentsToEdit = (List<Comments>) comments;
         book = bookRepo.findAll();
         model.put("books2", book);
 
@@ -120,7 +136,8 @@ public class MainController {
         bookRepo.save(book);
         Iterable<Books> books = bookRepo.findAll();
         model.put("books", books);
-        return "redirect:/main";
+
+        return "/add";
     }
 
     @PostMapping("filter")
@@ -150,11 +167,12 @@ public class MainController {
             books = bookRepo.findAll();
         }
 
+
         return "redirect:/main";
     }
 
     @PostMapping("books/upd")
-    public String upd(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @RequestParam String bookAuthorSelect, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, Map<String, Object> model) throws IOException {
+    public String upd(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @RequestParam String bookDescription, @RequestParam String bookAuthorSelect, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, Map<String, Object> model) throws IOException {
 
         if (bookName != null && !bookName.isEmpty()) {
 
@@ -166,6 +184,10 @@ public class MainController {
             if (bookAuthorSelect != null && !bookAuthorSelect.isEmpty()) {
                 booksToEdit.get(0).setBookAuthor(bookAuthorSelect);
             }
+        }
+        if (bookDescription != null && !bookDescription.isEmpty()) {
+
+            booksToEdit.get(0).setBookDescription(bookDescription);
         }
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -180,26 +202,36 @@ public class MainController {
         }
         bookRepo.saveAll(booksToEdit);
 
-        return "redirect:/main";
+        String address = "redirect:/books/" + booksToEdit.get(0).getId();
+        return address;
     }
 
     @PostMapping("books/comments")
-    public String comments(@AuthenticationPrincipal Integer id, @AuthenticationPrincipal String bookName, @AuthenticationPrincipal String bookAuthor, @AuthenticationPrincipal String bookDescription, @AuthenticationPrincipal User user, @RequestParam String comments, Map<String, Object> model) throws IOException {
-        //Books book = new Books(id, bookName, bookAuthor, user, bookDescription);
+    public String comments(@AuthenticationPrincipal Integer bookId, @AuthenticationPrincipal Integer id, @AuthenticationPrincipal String commentsAuthor, @AuthenticationPrincipal User user, @RequestParam String comments, Map<String, Object> model) {
+        Comments comment = new Comments(id, comments, commentsAuthor, bookId);
         if (comments != null && !comments.isEmpty()) {
-
-            booksToEdit.get(0).setComments(comments);
-            booksToEdit.get(0).setCommentsAuthor(user.getUsername());
-            bookRepo.saveAll(booksToEdit);
-
-//            book.setComments(comments);
-//            book.setCommentsAuthor(user.getUsername());
-            //  bookRepo.saveAll(booksToEdit);
-            //  Books book =booksToEdit.get(0);
-           // bookRepo.save(book);
+            comment.setBookId(booksToEdit.get(0).getId());
+            comment.setComments(comments);
+            comment.setCommentsAuthor(user.getUsername());
+            commentsRepo.save(comment);
         }
 
 
-        return "redirect:/main";
+        String address = "redirect:/books/" + booksToEdit.get(0).getId();
+        return address;
+    }
+
+
+    @PostMapping("books/delcom")
+    public String delCom(@RequestParam String bookId, @AuthenticationPrincipal Integer id, Map<String, Object> model) {
+        Iterable<Comments> comments;
+        if (commentsToEdit.get(0).getId() != null) {
+            comments = commentsRepo.findById(commentsToEdit.get(0).getId());
+            commentsRepo.deleteAll(comments);
+        } else {
+            comments = commentsRepo.findAll();
+        }
+        String address = "redirect:/books/" + booksToEdit.get(0).getId();
+        return address;
     }
 }
