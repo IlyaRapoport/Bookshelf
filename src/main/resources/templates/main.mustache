@@ -3,10 +3,11 @@
     <style>
             @import "/static/style.css";
     </style>
-<meta content="/upload/logo.jpg">
+<meta content="/upload/logo.jpg"/>
     <title>Bookshelf</title>
 </head>
 <body id="intro">
+<div>Hello, {{name}}!</div>
 <table>
 
     <tr>
@@ -23,7 +24,7 @@
         <td>
             <form method="post" action="filter">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-                <input type="text" name="filter">
+                <input type="text" name="filter"/>
                 <button type="submit">Find</button>
             </form>
         </td>
@@ -45,13 +46,10 @@
     </tr>
     {{#books}}
         <tr>
-            <td><a href="/books/{{id}}">{{bookName}}</a>
+            <td id="list" data-id="{{id}}"><a href="/books/{{id}}">{{bookName}}</a>
             </td>
         </tr>
     {{/books}}
 </table>
-
-
-<br>
 </body>
 </html>

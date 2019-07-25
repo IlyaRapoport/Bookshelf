@@ -48,31 +48,31 @@ public class MainController {
         return "redirect:/main";
     }
 
-    @GetMapping("/delete")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String delete(@AuthenticationPrincipal User user, Map<String, Object> model) {
-        Iterable<Books> books = bookRepo.findAll();
-        model.put("books", books);
-        for (Role key : user.getRoles()) {
-            if (key.getAuthority().contains("ADMIN")) {
-                model.put("user", user);
-            }
-        }
-        return "delete";
-    }
+//    @GetMapping("/delete")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    public String delete(@AuthenticationPrincipal User user, Map<String, Object> model) {
+//        Iterable<Books> books = bookRepo.findAll();
+//        model.put("books", books);
+//        for (Role key : user.getRoles()) {
+//            if (key.getAuthority().contains("ADMIN")) {
+//                model.put("user", user);
+//            }
+//        }
+//        return "delete";
+//    }
 
-    @GetMapping("/update")
-    public String update(Map<String, Object> model) {
-        Iterable<Books> books = bookRepo.findAll();
-        model.put("books", books);
-        return "update";
-    }
+//    @GetMapping("/update")
+//    public String update(Map<String, Object> model) {
+//        Iterable<Books> books = bookRepo.findAll();
+//        model.put("books", books);
+//        return "update";
+//    }
 
     @GetMapping("/main")
     public String main(@AuthenticationPrincipal User user, Map<String, Object> model) {
         Iterable<Books> books = bookRepo.findAll();
         model.put("books", books);
-
+        model.put("name", user.getUsername());
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
                 model.put("user", user);
@@ -114,7 +114,7 @@ public class MainController {
     }
 
     @PostMapping("ad")
-    public String ad(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @RequestParam String bookDescription, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, @RequestParam(defaultValue = "") String bookAuthorSelect, Map<String, Object> model) throws IOException {
+    public String ad(@RequestParam (defaultValue = "") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @RequestParam String bookDescription, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, @RequestParam(defaultValue = "") String bookAuthorSelect, Map<String, Object> model) throws IOException {
         Books book = new Books(id, bookName, bookAuthor, user, bookDescription);
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -137,11 +137,12 @@ public class MainController {
         Iterable<Books> books = bookRepo.findAll();
         model.put("books", books);
 
-        return "/add";
+        return "redirect:/main";
     }
 
     @PostMapping("filter")
     public String filter(@AuthenticationPrincipal User user, @RequestParam String filter, Map<String, Object> model) {
+        model.put("name", user.getUsername());
         Iterable<Books> books;
         if (filter != null && !filter.isEmpty()) {
             books = bookRepo.findByBookName(filter);
