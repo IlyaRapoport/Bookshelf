@@ -1,0 +1,55 @@
+<html>
+<head>
+    <style>
+            @import "/static/style.css";
+    </style>
+<meta content="/upload/logo.jpg"/>
+    <title>Bookshelf</title>
+</head>
+<body id="intro">
+<div>Hello, {{name}}!</div>
+<table>
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/add">Add Book</a></li>
+
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+            </ul>
+        </td>
+
+        <td>
+            <form method="post" action="filter">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <input type="text" name="filter"/>
+                <button type="submit">Find</button>
+            </form>
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <h1>List of books</h1>
+
+        </td>
+    </tr>
+    {{#books}}
+        <tr>
+            <td id="list" data-id="{{id}}"><a href="/books/{{id}}">{{bookName}}</a>
+            </td>
+        </tr>
+    {{/books}}
+</table>
+</body>
+</html>

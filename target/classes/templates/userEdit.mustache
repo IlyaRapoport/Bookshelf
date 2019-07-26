@@ -1,0 +1,52 @@
+<html>
+<head>
+    <style>
+            @import "/static/style.css";
+
+    </style>
+    <meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
+</head>
+<body id="intro">
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/add">Add Book</a></li>
+
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+                <li><a href="/main">Back</a><br></li>
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr></table>
+
+<div><h1>User Editor</h1></div>
+
+<form action="/user" method="post">
+    <input type="bookName" name="username" value="{{user.username}}">
+    <input type="hidden" name="id" value="{{user.id}}">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    {{#roles}}
+        <label><input type="checkbox" name="{{.}}">{{.}}</label>
+    {{/roles}}
+
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

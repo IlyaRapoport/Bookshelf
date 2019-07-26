@@ -1,0 +1,60 @@
+<html>
+<head>
+    <style>
+            @import "/static/style.css";
+
+
+    </style>
+    <meta content="/upload/logo.jpg">
+    <title>Bookshelf</title>
+</head>
+<body id="intro">
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+                <li><a href="/add">Add Book</a></li>
+
+                {{#user}}
+                    <li><a href="/user">User list</a></li>{{/user}}
+                {{^user}}{{/user}}
+                <li><a href="/main">Back</a><br></li>
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<form method="post" enctype="multipart/form-data" action="ad">
+    <input type="text" name="bookName" placeholder="Book's Name"/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <input type="text" name="bookAuthor" placeholder="Book's Author">
+    {{#bookAuthor}}
+    <select name="bookAuthorSelect">{{#books}}
+        <option value="{{bookAuthor}}">{{bookAuthor}}</option>
+    {{/books}}
+    </select>{{/bookAuthor}}
+    {{^bookAuthor}}
+        <select name="bookAuthorSelect">{{#books}}
+            <option value=&nbsp;>{{bookAuthor}}</option>
+        {{/books}}
+        </select>{{/bookAuthor}}
+    <input type="text" name="bookDescription" placeholder="Book's Description">
+    <input type="file" name="file">
+    <button type="submit">ADD</button>
+</form>
+</body>
+</html>
