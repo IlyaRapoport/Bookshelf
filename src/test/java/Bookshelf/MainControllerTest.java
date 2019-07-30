@@ -95,6 +95,7 @@ public class MainControllerTest {
 
         MockHttpServletRequestBuilder multipart = multipart("/ad")
                 .file("file", "file".getBytes())
+                .file("filePDF", "file".getBytes())
                 .param("bookName", "bookName")
                 .param("bookAuthor", "bookAuthor")
                 .param("bookDescription", "bookDescription")
@@ -112,7 +113,8 @@ public class MainControllerTest {
     public void addBookWithSelect() throws Exception {
 
         MockHttpServletRequestBuilder multipartWithSelect = multipart("/ad")
-                .file("file", "file".getBytes())
+                .file("filePDF", "file.pdf".getBytes())
+                .file("file", "file.jpg".getBytes())
                 .param("bookName", "bookName")
                 .param("bookAuthor", "")
                 .param("bookAuthorSelect", "second")

@@ -20,6 +20,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -64,11 +65,11 @@ public class MainController {
                 model.put("user", user);
             }
         }
-        File folder = new File("upload");
+        File folder = new File("src/main/resources/upload");
         String[] files = folder.list();
         for (String file : files) {
             String fileForDeleteName = file;
-            File fileForDelete = new File("upload/" + fileForDeleteName);
+            File fileForDelete = new File("src/main/resources/upload/" + fileForDeleteName);
             fileForDelete.delete();
         }
         return "main";
@@ -85,7 +86,7 @@ public class MainController {
     public String download(Map<String, Object> model) throws IOException {
         if (pdfToEdit.size() != 0) {
 
-            File someFile = new File("upload/pdf.pdf");
+            File someFile = new File("src/main/resources/upload/pdf.pdf");
             FileOutputStream fos = new FileOutputStream(someFile);
             fos.write(pdfToEdit.get(0).getData());
             fos.flush();
@@ -106,16 +107,16 @@ public class MainController {
         filepdf = fileRepoPDF.findByBookId(id);
         pdfToEdit = (List<DBFilePDF>) filepdf;
         if (pdfToEdit.size() != 0) {
-            model.put("pdf", "upload/pdf.pdf");
+            model.put("pdf", "/upload/pdf.pdf");
         }
         book = bookRepo.findById(id);
         if (fileToEdit.size() != 0) {
             byte[] byte_array = ((List<DBFile>) file).get(0).getData();
             InputStream in = new ByteArrayInputStream(byte_array);
             BufferedImage bImageFromConvert = ImageIO.read(in);
-            ImageIO.write(bImageFromConvert, "jpg", new File("upload/img.jpg"));
+            ImageIO.write(bImageFromConvert, "jpg", new File("src/main/resources/upload/img.jpg"));
 
-            model.put("img", bImageFromConvert + ".jpg");
+            model.put("img", "/images/img.jpg");
         }
 
         model.put("books", book);
@@ -150,73 +151,69 @@ public class MainController {
         }
         bookRepo.save(book);
 
-        if (filePDF.getContentType().contains("pdf")) {
-            if (filePDF != null && !filePDF.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + filePDF.getOriginalFilename();
-                filePDF.transferTo(new File(uploadPath + "/" + resultFileName));
-                book.setFilename(resultFileName);
-
-                File pdf = new File(uploadPath + "/" + resultFileName);
-                Integer bookId = book.getId();
-                String fileName = resultFileName;
-                String fileType = filePDF.getContentType();
-
-                FileInputStream input = new FileInputStream(uploadPath + "/" + resultFileName);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                byte[] data;
-
-                byte[] buff = new byte[2048000];
-                for (int readNum; (readNum = input.read(buff)) != -1; ) {
-                    baos.write(buff, 0, readNum);
-                }
-
-                data = baos.toByteArray();
-
-                DBFilePDF dbFilePdf = new DBFilePDF(bookId, fileName, fileType, data);
-                dbFilePdf.setBookId(bookId);
-                dbFilePdf.setData(data);
-                dbFilePdf.setFileName(fileName);
-                dbFilePdf.setFileType(fileType);
-                fileRepoPDF.save(dbFilePdf);
+        if (Objects.requireNonNull(filePDF.getContentType()).contains("pdf")) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
             }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + filePDF.getOriginalFilename();
+            filePDF.transferTo(new File(uploadPath + "/" + resultFileName));
+            book.setFilename(resultFileName);
+
+            File pdf = new File(uploadPath + "/" + resultFileName);
+            Integer bookId = book.getId();
+            String fileName = resultFileName;
+            String fileType = filePDF.getContentType();
+
+            FileInputStream input = new FileInputStream(uploadPath + "/" + resultFileName);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            byte[] data;
+
+            byte[] buff = new byte[2048000];
+            for (int readNum; (readNum = input.read(buff)) != -1; ) {
+                baos.write(buff, 0, readNum);
+            }
+
+            data = baos.toByteArray();
+
+            DBFilePDF dbFilePdf = new DBFilePDF(bookId, fileName, fileType, data);
+            dbFilePdf.setBookId(bookId);
+            dbFilePdf.setData(data);
+            dbFilePdf.setFileName(fileName);
+            dbFilePdf.setFileType(fileType);
+            fileRepoPDF.save(dbFilePdf);
         }
 
-        if (file.getContentType().contains("image")) {
-            if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + file.getOriginalFilename();
-                file.transferTo(new File(uploadPath + "/" + resultFileName));
-                book.setFilename(resultFileName);
-
-                File image = new File(uploadPath + "/" + resultFileName);
-                Integer bookId = book.getId();
-                String fileName = resultFileName;
-                String fileType = file.getContentType();
-
-                BufferedImage originalImage = ImageIO.read(new File(uploadPath + "/" + resultFileName));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(originalImage, "jpg", baos);
-                baos.flush();
-                byte[] data = baos.toByteArray();
-                baos.close();
-
-                DBFile dbFile = new DBFile(bookId, fileName, fileType, data);
-                dbFile.setBookId(bookId);
-                dbFile.setData(data);
-                dbFile.setFileName(fileName);
-                dbFile.setFileType(fileType);
-                fileRepo.save(dbFile);
+        if (Objects.requireNonNull(file.getContentType()).contains("image")) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
             }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+            book.setFilename(resultFileName);
+
+            File image = new File(uploadPath + "/" + resultFileName);
+            Integer bookId = book.getId();
+            String fileName = resultFileName;
+            String fileType = file.getContentType();
+
+            BufferedImage originalImage = ImageIO.read(new File(uploadPath + "/" + resultFileName));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(originalImage, "jpg", baos);
+            baos.flush();
+            byte[] data = baos.toByteArray();
+            baos.close();
+
+            DBFile dbFile = new DBFile(bookId, fileName, fileType, data);
+            dbFile.setBookId(bookId);
+            dbFile.setData(data);
+            dbFile.setFileName(fileName);
+            dbFile.setFileType(fileType);
+            fileRepo.save(dbFile);
         }
         Iterable<Books> books = bookRepo.findAll();
         model.put("books", books);
