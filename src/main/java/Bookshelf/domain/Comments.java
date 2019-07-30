@@ -7,6 +7,14 @@ import javax.persistence.Id;
 
 @Entity
 public class Comments {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    private Integer id;
+    private String comments;
+    private String commentsAuthor;
+    private Integer bookId;
+
     public Integer getId() {
         return id;
     }
@@ -38,14 +46,6 @@ public class Comments {
     public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-
-    private Integer id;
-    private String comments;
-    private String commentsAuthor;
-    private Integer bookId;
 
     public Comments() {
     }

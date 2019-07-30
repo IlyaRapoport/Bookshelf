@@ -45,130 +45,145 @@ public class UserControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
-
-
-
-
     @Test
-    public void mainPageTest() throws Exception {
-        this.mockMvc.perform(get("/main"))
+    public void getUserEdit() throws Exception {
+        this.mockMvc.perform(get("/user/2"))
                 .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='intro']/div").string("Hello, test!"));
-    }
-
-
-    @Test
-    public void messageListTest() throws Exception {
-        this.mockMvc.perform(get("/main"))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='list']/a").nodeCount(4));
-
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    public void filterList() throws Exception {
-        this.mockMvc.perform(post("/filter").param("filter", "test").with(csrf()))
+    public void postUserEdit() throws Exception {
+        this.mockMvc.perform(post("/user")
+                .param("username", "name")
+                .param("id", "2")
+                .param("ADMIN", "").with(csrf()))
                 .andDo(print())
                 .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='list']/a").nodeCount(2))
-                .andExpect(xpath("//*[@data-id=1]").exists())
-                .andExpect(xpath("//*[@data-id=3]").exists());
+                .andExpect(redirectedUrlTemplate("/user"));
     }
 
-    @Test
-    public void addBook() throws Exception {
 
-        MockHttpServletRequestBuilder multipart = multipart("/ad")
-                .file("file", "file".getBytes())
-                .param("bookName", "bookName")
-                .param("bookAuthor", "bookAuthor")
-                .param("bookDescription", "bookDescription")
-                .with(csrf());
-        this.mockMvc.perform(multipart)
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(status().is3xxRedirection());
-
-        this.mockMvc.perform(get("/main"))
-                .andDo(print())
-                .andExpect(xpath("//*[@id='list']/a").nodeCount(5));
-    }
-
-    @Test
-    public void deleteBook() throws Exception {
-
-        this.mockMvc.perform(get("/books/4"))
-                .andDo(print())
-                .andExpect(authenticated());
-
-        this.mockMvc.perform(post("/books/del").with(csrf()))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlTemplate("/main"));
-
-        this.mockMvc.perform(get("/main"))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='list']/a").nodeCount(3));
-
-
-    }
-
-    @Test
-    public void addAmdDeleteComments() throws Exception {
-
-        this.mockMvc.perform(get("/books/2"))
-                .andDo(print())
-                .andExpect(authenticated());
-
-        this.mockMvc.perform(post("/books/comments").param("comments", "comments").with(csrf()))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(status().is3xxRedirection());
-
-        this.mockMvc.perform(get("/books/2"))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='CommentsAuthor']/h0").exists())
-                .andExpect(xpath("//*[@id='comments']/h0").exists());
-
-        this.mockMvc.perform(get("/books/2"))
-                .andDo(print())
-                .andExpect(authenticated());
-
-        this.mockMvc.perform(post("/books/delcom").param("bookId", "2").with(csrf()))
-                .andDo(print())
-                .andExpect(authenticated());
-
-        this.mockMvc.perform(get("/books/2"))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id='CommentsAuthor']/h0").doesNotExist())
-                .andExpect(xpath("//*[@id='comments']/h0").doesNotExist());
-    }
-
-    @Test
-    public void editBook() throws Exception {
-
-        this.mockMvc.perform(get("/books/2"))
-                .andDo(print())
-                .andExpect(authenticated());
-
-        MockHttpServletRequestBuilder multipart = multipart("/books/upd")
-                .file("file", "file".getBytes())
-                .param("bookName", "bookName")
-                .param("bookAuthor", "bookAuthor")
-                .param("bookDescription", "bookDescription")
-                .param("bookAuthorSelect", "bookAuthorSelect")
-                .with(csrf());
-        this.mockMvc.perform(multipart)
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(status().is3xxRedirection());
-
-    }
+//    @Test
+//    public void mainPageTest() throws Exception {
+//        this.mockMvc.perform(get("/main"))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='intro']/div").string("Hello, test!"));
+//    }
+//
+//
+//    @Test
+//    public void messageListTest() throws Exception {
+//        this.mockMvc.perform(get("/main"))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='list']/a").nodeCount(4));
+//
+//    }
+//
+//    @Test
+//    public void filterList() throws Exception {
+//        this.mockMvc.perform(post("/filter").param("filter", "test").with(csrf()))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='list']/a").nodeCount(2))
+//                .andExpect(xpath("//*[@data-id=1]").exists())
+//                .andExpect(xpath("//*[@data-id=3]").exists());
+//    }
+//
+//    @Test
+//    public void addBook() throws Exception {
+//
+//        MockHttpServletRequestBuilder multipart = multipart("/ad")
+//                .file("file", "file".getBytes())
+//                .param("bookName", "bookName")
+//                .param("bookAuthor", "bookAuthor")
+//                .param("bookDescription", "bookDescription")
+//                .with(csrf());
+//        this.mockMvc.perform(multipart)
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(status().is3xxRedirection());
+//
+//        this.mockMvc.perform(get("/main"))
+//                .andDo(print())
+//                .andExpect(xpath("//*[@id='list']/a").nodeCount(5));
+//    }
+//
+//    @Test
+//    public void deleteBook() throws Exception {
+//
+//        this.mockMvc.perform(get("/books/4"))
+//                .andDo(print())
+//                .andExpect(authenticated());
+//
+//        this.mockMvc.perform(post("/books/del").with(csrf()))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrlTemplate("/main"));
+//
+//        this.mockMvc.perform(get("/main"))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='list']/a").nodeCount(3));
+//
+//
+//    }
+//
+//    @Test
+//    public void addAmdDeleteComments() throws Exception {
+//
+//        this.mockMvc.perform(get("/books/2"))
+//                .andDo(print())
+//                .andExpect(authenticated());
+//
+//        this.mockMvc.perform(post("/books/comments").param("comments", "comments").with(csrf()))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(status().is3xxRedirection());
+//
+//        this.mockMvc.perform(get("/books/2"))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='CommentsAuthor']/h0").exists())
+//                .andExpect(xpath("//*[@id='comments']/h0").exists());
+//
+//        this.mockMvc.perform(get("/books/2"))
+//                .andDo(print())
+//                .andExpect(authenticated());
+//
+//        this.mockMvc.perform(post("/books/delcom").param("bookId", "2").with(csrf()))
+//                .andDo(print())
+//                .andExpect(authenticated());
+//
+//        this.mockMvc.perform(get("/books/2"))
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(xpath("//*[@id='CommentsAuthor']/h0").doesNotExist())
+//                .andExpect(xpath("//*[@id='comments']/h0").doesNotExist());
+//    }
+//
+//    @Test
+//    public void editBook() throws Exception {
+//
+//        this.mockMvc.perform(get("/books/2"))
+//                .andDo(print())
+//                .andExpect(authenticated());
+//
+//        MockHttpServletRequestBuilder multipart = multipart("/books/upd")
+//                .file("file", "file".getBytes())
+//                .param("bookName", "bookName")
+//                .param("bookAuthor", "bookAuthor")
+//                .param("bookDescription", "bookDescription")
+//                .param("bookAuthorSelect", "bookAuthorSelect")
+//                .with(csrf());
+//        this.mockMvc.perform(multipart)
+//                .andDo(print())
+//                .andExpect(authenticated())
+//                .andExpect(status().is3xxRedirection());
+//
+//    }
 
 }

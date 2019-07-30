@@ -4,6 +4,8 @@
             @import "/static/style.css";
 
 
+
+
     </style>
     <meta content="/upload/logo.jpg">
     <title>Bookshelf</title>
@@ -43,10 +45,10 @@
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <input type="text" name="bookAuthor" placeholder="Book's Author">
     {{#bookAuthor}}
-    <select name="bookAuthorSelect">{{#books}}
-        <option value="{{bookAuthor}}">{{bookAuthor}}</option>
-    {{/books}}
-    </select>{{/bookAuthor}}
+        <select name="bookAuthorSelect">{{#books}}
+            <option value="{{bookAuthor}}">{{bookAuthor}}</option>
+        {{/books}}
+        </select>{{/bookAuthor}}
     {{^bookAuthor}}
         <select name="bookAuthorSelect">{{#books}}
             <option value=&nbsp;>{{bookAuthor}}</option>
@@ -54,6 +56,7 @@
         </select>{{/bookAuthor}}
     <input type="text" name="bookDescription" placeholder="Book's Description">
     <input type="file" name="file">
+    <input type="file" name="filePDF">
     <button type="submit">ADD</button>
 </form>
 </body>

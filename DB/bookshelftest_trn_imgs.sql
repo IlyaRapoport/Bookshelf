@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
 --
--- Host: localhost    Database: bookshelf
+-- Host: localhost    Database: bookshelftest
 -- ------------------------------------------------------
 -- Server version	8.0.16
 
@@ -16,29 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `comments`
+-- Table structure for table `trn_imgs`
 --
 
-DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `trn_imgs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `comments` (
-  `id` int(11) NOT NULL,
-  `book_id` int(11) DEFAULT NULL,
-  `comments` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `comments_author` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE `trn_imgs` (
+  `img_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img_title` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `img_data` blob NOT NULL,
+  PRIMARY KEY (`img_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comments`
+-- Dumping data for table `trn_imgs`
 --
 
-LOCK TABLES `comments` WRITE;
-/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (45,26,'wqdqweqw','1'),(41,25,'sdfsaddff','admin'),(61,47,'sadasdas','admin'),(44,26,'asdasd','admin'),(60,47,'asdasd','admin'),(62,47,'asdasdasd','admin');
-/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+LOCK TABLES `trn_imgs` WRITE;
+/*!40000 ALTER TABLE `trn_imgs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trn_imgs` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-25 10:10:40
+-- Dump completed on 2019-07-30 14:10:47

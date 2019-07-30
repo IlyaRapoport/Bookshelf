@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CommentsRepo extends CrudRepository<Comments, Long> {
     List<Comments> findByBookId(Integer id);
-    List<Comments> findById(Integer id);
 
+    List<Comments> findById(Integer id);
 }

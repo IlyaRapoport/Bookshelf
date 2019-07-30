@@ -76,6 +76,21 @@ public class MainControllerTest {
     }
 
     @Test
+    public void filterListEmpty() throws Exception {
+        this.mockMvc.perform(post("/filter").param("filter", "").with(csrf()))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//*[@id='list']/a").nodeCount(4));
+    }
+
+    @Test
+    public void getAddBook() throws Exception {
+        this.mockMvc.perform(get("/add"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
     public void addBook() throws Exception {
 
         MockHttpServletRequestBuilder multipart = multipart("/ad")
@@ -93,6 +108,25 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(xpath("//*[@id='list']/a").nodeCount(5));
     }
+    @Test
+    public void addBookWithSelect() throws Exception {
+
+        MockHttpServletRequestBuilder multipartWithSelect = multipart("/ad")
+                .file("file", "file".getBytes())
+                .param("bookName", "bookName")
+                .param("bookAuthor", "")
+                .param("bookAuthorSelect", "second")
+                .param("bookDescription", "bookDescription")
+                .with(csrf());
+        this.mockMvc.perform(multipartWithSelect)
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(status().is3xxRedirection());
+
+        this.mockMvc.perform(get("/main"))
+                .andDo(print())
+                .andExpect(xpath("//*[@id='list']/a").nodeCount(5));
+    }
 
     @Test
     public void deleteBook() throws Exception {
@@ -100,6 +134,37 @@ public class MainControllerTest {
         this.mockMvc.perform(get("/books/4"))
                 .andDo(print())
                 .andExpect(authenticated());
+
+        this.mockMvc.perform(post("/books/del").with(csrf()))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlTemplate("/main"));
+
+        this.mockMvc.perform(get("/main"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//*[@id='list']/a").nodeCount(3));
+
+
+    }
+    @Test
+    public void deleteBookWithComments() throws Exception {
+
+        this.mockMvc.perform(get("/books/4"))
+                .andDo(print())
+                .andExpect(authenticated());
+
+        this.mockMvc.perform(post("/books/comments").param("comments", "comments").with(csrf()))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(status().is3xxRedirection());
+
+        this.mockMvc.perform(get("/books/4"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//*[@id='CommentsAuthor']/h0").exists())
+                .andExpect(xpath("//*[@id='comments']/h0").exists());
 
         this.mockMvc.perform(post("/books/del").with(csrf()))
                 .andDo(print())
@@ -161,6 +226,26 @@ public class MainControllerTest {
                 .param("bookAuthor", "bookAuthor")
                 .param("bookDescription", "bookDescription")
                 .param("bookAuthorSelect", "bookAuthorSelect")
+                .with(csrf());
+        this.mockMvc.perform(multipart)
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(status().is3xxRedirection());
+
+    }
+    @Test
+    public void editBookWithSelect() throws Exception {
+
+        this.mockMvc.perform(get("/books/2"))
+                .andDo(print())
+                .andExpect(authenticated());
+
+        MockHttpServletRequestBuilder multipart = multipart("/books/upd")
+                .file("file", "file".getBytes())
+                .param("bookName", "bookName")
+                .param("bookAuthor", "")
+                .param("bookDescription", "bookDescription")
+                .param("bookAuthorSelect", "second")
                 .with(csrf());
         this.mockMvc.perform(multipart)
                 .andDo(print())

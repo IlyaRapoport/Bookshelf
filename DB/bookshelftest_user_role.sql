@@ -16,32 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `books`
+-- Table structure for table `user_role`
 --
 
-DROP TABLE IF EXISTS `books`;
+DROP TABLE IF EXISTS `user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `books` (
-  `id` int(11) NOT NULL,
-  `book_author` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `book_description` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `book_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `file_for_download` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `filename` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKaaw1q71x73au52leowe1x2jsr` (`user_id`)
+CREATE TABLE `user_role` (
+  `user_id` bigint(20) NOT NULL,
+  `roles` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  KEY `FKfpm8swft53ulq2hl11yplpr5` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `books`
+-- Dumping data for table `user_role`
 --
 
-LOCK TABLES `books` WRITE;
-/*!40000 ALTER TABLE `books` DISABLE KEYS */;
-/*!40000 ALTER TABLE `books` ENABLE KEYS */;
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-25 10:50:14
+-- Dump completed on 2019-07-30 14:10:50

@@ -11,7 +11,6 @@ public class Books {
     private String bookAuthor;
     private String bookDescription;
 
-
     public String getBookDescription() {
         return bookDescription;
     }
@@ -19,7 +18,6 @@ public class Books {
     public void setBookDescription(String bookDescription) {
         this.bookDescription = bookDescription;
     }
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_id")
@@ -35,7 +33,6 @@ public class Books {
         this.filename = filename;
     }
 
-
     public User getAuthor() {
         return author;
     }
@@ -43,7 +40,6 @@ public class Books {
     public void setAuthor(User author) {
         this.author = author;
     }
-
 
     public Books() {
     }
@@ -54,9 +50,7 @@ public class Books {
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
         this.bookDescription = bookDescription;
-
     }
-
 
     public String getAuthorName() {
         return author != null ? author.getUsername() : "<none>";

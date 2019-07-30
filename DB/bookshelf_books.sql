@@ -41,7 +41,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (25,'auth1','sfsgsdfgzdf','name1',NULL,NULL,1),(26,'auth2','dsfsdfsd','name2',NULL,NULL,1),(46,'auth2','sdf','dsfsd',NULL,NULL,1),(66,'asdas','asdasd','asdasd',NULL,NULL,15);
+INSERT INTO `books` VALUES (128,' ','','pdfnew',NULL,'c63c4168-ba22-4c95-95a8-f300c7014cd8.IntelliJIDEA_ReferenceCard.pdf',1),(130,' ','','imgpdf',NULL,'0f32fb89-1151-4b78-ac57-e0c7a20e0a34.bookshelf-icon-vector-3243335.jpg',1),(133,' ','','imgpdf2',NULL,'73c77e4f-d6df-4465-9bf3-654c9c46056a.harry.jpg',1);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-24  8:42:19
+-- Dump completed on 2019-07-30 14:10:17

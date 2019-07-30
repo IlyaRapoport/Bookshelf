@@ -37,7 +37,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (45,26,'wqdqweqw','1'),(41,25,'sdfsaddff','admin'),(61,47,'sadasdas','admin'),(44,26,'asdasd','admin'),(60,47,'asdasd','admin'),(62,47,'asdasdasd','admin');
+INSERT INTO `comments` VALUES (86,79,'erwer','3'),(87,79,'rtrt','3');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-24  8:42:27
+-- Dump completed on 2019-07-30 14:10:32

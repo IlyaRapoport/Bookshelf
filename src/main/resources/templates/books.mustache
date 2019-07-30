@@ -1,15 +1,15 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <style>
             @import "/static/style.css";
 
+
     </style>
-    <meta content="/upload/logo.jpg"/>
+    <meta content="logo.jpg"/>
     <title>Bookshelf</title>
 </head>
 <body id="intro">
 <table width="1000">
-
     <tr>
         <td>
             <ul>
@@ -21,9 +21,7 @@
                 <li><a href="/main">Back</a></li>
             </ul>
         </td>
-
         <td width="408">
-
         </td>
         <td>
             <div align="right">
@@ -35,7 +33,6 @@
         </td>
     </tr>
 </table>
-
 {{#books}}
     {{#user}}<h1>Edit book</h1>{{/user}}
     {{^user}}{{/user}}
@@ -44,12 +41,10 @@
         <td>
             <table>
                 <td width="220">
-                    {{#filename}}
-
-                        <img width="200" src="/upload/{{filename}}"/>
-                    {{/filename}}{{^filename}}{{/filename}}
+                    {{#img}}
+                        <img width="200" src="../upload/img.jpg"/>
+                    {{/img}}{{^img}}{{/img}}
                 </td>
-
             </table>
         </td>
         <td width="150" align="left" valign="top">
@@ -63,9 +58,7 @@
                 <tr>
                     <h0>Book's Description:</h0>
                 </tr>
-
             </table>
-
         </td>
         <td width="150" align="left" valign="top">
             <table>
@@ -80,62 +73,52 @@
                 </tr>
             </table>
         </td>{{#user}}
-        <td width="150" align="left" valign="top">
-            <table align="top">
-
-                <form method="post" action="upd" enctype="multipart/form-data">
-                    <tr>
-                        <input type="text" name="bookName" placeholder="{{bookName}}"/>
-                        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-                    </tr>
-                    <tr>
-                        <input type="text" name="bookAuthor" placeholder="{{bookAuthor}}"/>
-                    </tr>
-                    <tr>
-                        <input type="text" name="bookDescription" placeholder="{{bookDescription}}"/>
-                    </tr>
-                    <tr>
-                        <input type="file" name="file"/>
-                    </tr>
-                    <tr>
-                        <button type="submit">Edit</button>
-                    </tr>
-
-                    <tr><select name="bookAuthorSelect">{{#books2}}
-                        <option value="{{bookAuthor}}">{{bookAuthor}}</option>
-
-                    {{/books2}}
-                    </select></tr>
-                </form>
-
-            </table>
-
-        </td>
-
-
-    </table>
-
+            <td width="150" align="left" valign="top">
+                <table align="top">
+                    <form method="post" action="upd" enctype="multipart/form-data">
+                        <tr>
+                            <input type="text" name="bookName" placeholder="{{bookName}}"/>
+                            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                        </tr>
+                        <tr>
+                            <input type="text" name="bookAuthor" placeholder="{{bookAuthor}}"/>
+                        </tr>
+                        <tr>
+                            <input type="text" name="bookDescription" placeholder="{{bookDescription}}"/>
+                        </tr>
+                        <tr>
+                            <input type="file" name="file"/>
+                        </tr>
+                        <tr>
+                            <button type="submit">Edit</button>
+                        </tr>
+                        <tr><select name="bookAuthorSelect">{{#books2}}
+                            <option value="{{bookAuthor}}">{{bookAuthor}}</option>
+                        {{/books2}}
+                        </select></tr>
+                    </form>
+                </table>
+            </td>
+        </table>
 
         <form method="post" action="del">
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             <button type="submit">Delete Book</button>
-
         </form>
     {{/user}}{{^user}}{{/user}}
-
-
+    {{#pdf}}
+        <form method="get" action="download">
+            <button type="submit" onclick="window.open('../upload/pdf.pdf')">Download Book</button>
+        </form>
+    {{/pdf}}{{^pdf}}{{/pdf}}
     {{#comments}}
         <table>
-
             <td id="CommentsAuthor">  {{#CommentsAuthor}}
                 <h0> {{CommentsAuthor}}</h0>
             {{/CommentsAuthor}}
             </td>
-
-
             <td id="comments">
                 <h0> {{comments}}</h0>
-
             </td>
             <td>{{#user}}
                 <form method="post" action="delcom">
@@ -144,7 +127,6 @@
                     <button type="submit">delete</button>
                 </form>{{/user}}
                 {{^user}}{{/user}}</td>
-
         </table>
 
     {{/comments}}
@@ -155,6 +137,5 @@
         <button type="submit">ADD comments</button>
     </form>
 {{/books}}
-
 </body>
 </html>

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
 --
--- Host: localhost    Database: bookshelf
+-- Host: localhost    Database: bookshelftest
 -- ------------------------------------------------------
 -- Server version	8.0.16
 
@@ -41,7 +41,6 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (25,'auth1','sfsgsdfgzdf','name1',NULL,NULL,1),(26,'auth2','dsfsdfsd','name2',NULL,NULL,1),(46,'auth2','sdf','dsfsd',NULL,NULL,1),(66,'asdas','asdasd','asdasd',NULL,NULL,15),(68,' ','dfasdas','name',NULL,NULL,1),(69,'asdasd','asdasd','sdasd',NULL,NULL,1),(70,'sdfsdf','sdfsd','dsfsdf',NULL,NULL,1),(71,'sdfsdf','sdfsd','dsfsdf',NULL,NULL,1),(72,'asdasd','asdsa','test',NULL,NULL,1),(73,'afdaf','sadas','test1',NULL,'0841043a-d3ca-4d21-88ae-9378a390922e.harry.jpg',1),(74,' ','dasdas','test2',NULL,NULL,1),(75,'auth2','asdasd','test3',NULL,NULL,1),(76,' ','sadas','testt',NULL,NULL,1),(78,'1','1','1',NULL,NULL,1);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-25 10:10:34
+-- Dump completed on 2019-07-30 14:10:39
