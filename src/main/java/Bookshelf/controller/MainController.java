@@ -5,6 +5,7 @@ import Bookshelf.repos.BookRepo;
 import Bookshelf.repos.CommentsRepo;
 import Bookshelf.repos.DBFilePDFRepository;
 import Bookshelf.repos.DBFileRepository;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
@@ -65,13 +66,21 @@ public class MainController {
                 model.put("user", user);
             }
         }
-        File folder = new File("src/main/resources/upload");
+        File folder = new File("upload");
         String[] files = folder.list();
+        for (String file : files) {
+            String fileForDeleteName = file;
+            File fileForDelete = new File("upload/" + fileForDeleteName);
+            fileForDelete.delete();
+        }
+         folder = new File("src/main/resources/upload");
+        files = folder.list();
         for (String file : files) {
             String fileForDeleteName = file;
             File fileForDelete = new File("src/main/resources/upload/" + fileForDeleteName);
             fileForDelete.delete();
         }
+
         return "main";
     }
 
@@ -106,17 +115,10 @@ public class MainController {
         Iterable<DBFilePDF> filepdf;
         filepdf = fileRepoPDF.findByBookId(id);
         pdfToEdit = (List<DBFilePDF>) filepdf;
-        if (pdfToEdit.size() != 0) {
-            model.put("pdf", "/upload/pdf.pdf");
-        }
+
         book = bookRepo.findById(id);
         if (fileToEdit.size() != 0) {
-            byte[] byte_array = ((List<DBFile>) file).get(0).getData();
-            InputStream in = new ByteArrayInputStream(byte_array);
-            BufferedImage bImageFromConvert = ImageIO.read(in);
-            ImageIO.write(bImageFromConvert, "jpg", new File("src/main/resources/upload/img.jpg"));
-
-            model.put("img", "/images/img.jpg");
+            model.put("img", Base64.encode(fileToEdit.get(0).getData()));
         }
 
         model.put("books", book);
@@ -130,6 +132,9 @@ public class MainController {
         book = bookRepo.findAll();
         model.put("books2", book);
 
+        if (pdfToEdit.size() != 0) {
+            model.put("pdf", "/upload/pdf.pdf");
+        }
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
                 model.put("user", user);

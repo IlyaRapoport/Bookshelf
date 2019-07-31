@@ -41,7 +41,7 @@
             <table>
                 <td width="220">
                     {{#img}}
-                        <img src="{{{img}}}"  height="180" width="200" />
+                        <img width="200" src="data:image/jpg;base64,{{img}}">
                     {{/img}}{{^img}}{{/img}}
                 </td>
             </table>
@@ -110,6 +110,7 @@
             <button type="submit" onclick="window.open('{{pdf}}')">Download Book</button>
         </form>
     {{/pdf}}{{^pdf}}{{/pdf}}
+
     {{#comments}}
         <table>
             <td id="CommentsAuthor">  {{#CommentsAuthor}}
