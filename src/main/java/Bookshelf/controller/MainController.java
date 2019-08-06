@@ -1,13 +1,12 @@
 package Bookshelf.controller;
 
 import Bookshelf.domain.*;
-import Bookshelf.repos.BookRepo;
-import Bookshelf.repos.CommentsRepo;
-import Bookshelf.repos.DBFilePDFRepository;
-import Bookshelf.repos.DBFileRepository;
+import Bookshelf.repos.*;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.convert.JodaTimeConverters;
+import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,10 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @Service
@@ -37,6 +33,8 @@ public class MainController {
     List<DBFilePDF> pdfToEdit;
     @Autowired
     private BookRepo bookRepo;
+    @Autowired
+    private StatisticRepo statisticRepo;
     @Autowired
     private DBFileRepository fileRepo;
     @Autowired
@@ -58,6 +56,11 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(@AuthenticationPrincipal User user, Map<String, Object> model) {
+        for (Role key : user.getRoles()) {
+            if (key.getAuthority().contains("STATISTIC")) {
+                return "redirect:/statistic";
+            }
+        }
         Iterable<Books> books = bookRepo.findAll();
         model.put("books", books);
         model.put("name", user.getUsername());
@@ -92,7 +95,7 @@ public class MainController {
     }
 
     @GetMapping("books/download")
-    public String download(Map<String, Object> model) throws IOException {
+    public String download( @AuthenticationPrincipal User user,Map<String, Object> model) throws IOException {
         if (pdfToEdit.size() != 0) {
 
             File someFile = new File("src/main/resources/upload/pdf.pdf");
@@ -101,6 +104,17 @@ public class MainController {
             fos.flush();
             fos.close();
         }
+        Integer bookId=booksToEdit.get(0).getId();
+
+        Date statDate= new Date();
+        Long userId=user.getId();
+
+        Statistic statistic = new Statistic( bookId,  statDate,  userId);
+        statistic.setBookId(bookId);
+        statistic.setStatDate(statDate);
+        statistic.setUserId(userId);
+
+        statisticRepo.save(statistic);
         String address = "redirect:/books/" + booksToEdit.get(0).getId();
         return address;
     }

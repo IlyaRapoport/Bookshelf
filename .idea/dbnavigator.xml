@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="e7370a96-13e6-437b-9595-f974a334ecb3">
-        <schema name="bookshelf" object-types="table, function, procedure, view" />
+        <schema name="bookshelf" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -39,6 +39,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="e7370a96-13e6-437b-9595-f974a334ecb3" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="e7370a96-13e6-437b-9595-f974a334ecb3" dataset="bookshelf.statistic" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -71,7 +74,7 @@
     <connections>
       <connection id="e7370a96-13e6-437b-9595-f974a334ecb3" active="true">
         <database>
-          <name value="bookshelftest" />
+          <name value="bookshelf" />
           <description value="" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />

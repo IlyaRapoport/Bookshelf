@@ -1,0 +1,88 @@
+<html xmlns:chart.options.data xmlns:chart.options.data>
+<head>
+    <style>
+            @import "/static/style.css";
+    </style>
+    <title>Bookshelf</title>
+    <script>
+
+window.onload = function () {
+
+//Better to construct options first and then pass it as a parameter
+var options = {
+	title: {
+		text: "Statistic of books what was downloaded"
+	},
+	data: [
+	{
+		// Change type to "doughnut", "line", "splineArea", etc.
+		type: "column",
+		dataPoints: [
+		]
+	}
+	]
+};
+
+$("#chartContainer").CanvasJSChart(options);
+
+$("#addDataPoint").ready(function () {
+		var chart = $("#chartContainer").CanvasJSChart();
+		chart.options.data[0].dataPoints.push(
+
+{{#stat}}
+    { label:"{{bookId}}",  y:{{count}} },
+{{/stat}}
+        {{^stat}}{{/stat}}
+);
+		chart.render();
+
+	});
+
+}
+
+
+    </script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+
+</head>
+<body id="intro">
+
+<table width="1000">
+
+    <tr>
+        <td>
+            <ul>
+
+            </ul>
+        </td>
+
+        <td width="408">
+
+        </td>
+        <td>
+            <div align="right">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<form method="post" action="statistic/date">
+    Date from: <input type="date" name="from"/>
+    Date till: <input type="date" name="till"/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <button type="submit">ADD</button>
+</form>
+{{#stat}}
+    <div id="chartContainer"></div>
+
+    <div id="addDataPoint" style="position:absolute;right:0px;margin-right:10px;"></div>
+{{/stat}}{{^stat}}{{/stat}}
+</body>
+</html>
