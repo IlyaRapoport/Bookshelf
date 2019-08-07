@@ -29,8 +29,8 @@
 
 <h1>Login page</h1>
 <form action="/login" method="post">
-    <div align="left"><label> User Name:&nbsp; <input type="bookName" name="username"/> </label></div>
-    <div align="left"><label> Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" name="password"/> </label>
+    <div align="right"><label> User Name:<input type="text" name="username"/> </label></div>
+    <div align="right"><label> Password:<input type="password" name="password"/> </label>
     </div>
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <div><input type="submit" value="Sign In"/></div>

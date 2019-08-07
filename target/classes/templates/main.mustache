@@ -16,8 +16,11 @@
                 <li><a href="/add">Add Book</a></li>
 
                 {{#user}}
-                    <li><a href="/user">User list</a></li>{{/user}}
+                    <li><a href="/user">User list</a></li>
+                    <li><a href="/registration">Add new User</a></li>
+                {{/user}}
                 {{^user}}{{/user}}
+                <li><a href="/edit/{{id}}">Edit user:{{name}}</a></li>
             </ul>
         </td>
 

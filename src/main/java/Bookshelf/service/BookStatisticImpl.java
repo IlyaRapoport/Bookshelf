@@ -3,6 +3,7 @@ package Bookshelf.service;
 import Bookshelf.domain.Statistic;
 import Bookshelf.repos.StatisticRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -56,7 +57,7 @@ public class BookStatisticImpl implements BookStatistic {
 
         Map<String, Integer> statModel = new HashMap<>();
 
-        Iterable<Statistic> statistic = statisticRepo.findAll();
+        Iterable<Statistic> statistic = statisticRepo.findAll(Sort.by("bookId"));
         for (Statistic statValue : statistic) {
 
             String key = statValue.getBookId().toString();

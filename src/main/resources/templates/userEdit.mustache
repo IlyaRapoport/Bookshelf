@@ -15,9 +15,10 @@
             <ul>
                 <li><a href="/add">Add Book</a></li>
 
-                {{#user}}
-                    <li><a href="/user">User list</a></li>{{/user}}
-                {{^user}}{{/user}}
+
+                    <li><a href="/user">User list</a></li>
+                    <li><a href="/registration">Add new User</a></li>
+
                 <li><a href="/main">Back</a><br></li>
             </ul>
         </td>
@@ -37,8 +38,9 @@
 
 <div><h1>User Editor</h1></div>
 
-<form action="/user" method="post">
-    <input type="bookName" name="username" value="{{user.username}}">
+<form action="/user" method="post" >
+    Set new User Name:<input type="text" name="username" value="{{user.username}}"><br>
+    Set new User Password:<input type="text" name="password"><br>
     <input type="hidden" name="id" value="{{user.id}}">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     {{#roles}}

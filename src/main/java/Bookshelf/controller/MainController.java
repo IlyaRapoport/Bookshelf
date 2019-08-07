@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.JodaTimeConverters;
 import org.springframework.data.convert.Jsr310Converters;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -61,9 +62,10 @@ public class MainController {
                 return "redirect:/statistic";
             }
         }
-        Iterable<Books> books = bookRepo.findAll();
+        Iterable<Books> books = bookRepo.findAll(Sort.by("bookName"));
         model.put("books", books);
         model.put("name", user.getUsername());
+        model.put("id", user.getId());
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
                 model.put("user", user);
@@ -89,7 +91,7 @@ public class MainController {
 
     @GetMapping("/add")
     public String add(Map<String, Object> model) {
-        Iterable<Books> books = bookRepo.findAll();
+        Iterable<Books> books = bookRepo.findAll(Sort.by("bookAuthor"));
         model.put("books", books);
         return "add";
     }

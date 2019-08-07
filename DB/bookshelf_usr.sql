@@ -37,7 +37,7 @@ CREATE TABLE `usr` (
 
 LOCK TABLES `usr` WRITE;
 /*!40000 ALTER TABLE `usr` DISABLE KEYS */;
-INSERT INTO `usr` VALUES (1,_binary '','admin','admin'),(15,_binary '','1','1'),(67,_binary '','test','test'),(85,_binary '','3','3');
+INSERT INTO `usr` VALUES (1,_binary '','$2a$08$9LvWXAz.6JDz6ifTPrlge.cZ.O6ngoa9OXQlcCnyHM.csHhMGOZAa','admin'),(2,_binary '','$2a$08$cuSFpzYzHJHqmWBxqq5pquRlJWBWxF6mvme3nTBX7v1WUUvtShgRy','stat'),(3,_binary '','$2a$08$oGmeUqC.t49PTTJUBaxeUet7RVE//OLgJwvROCN4/i.LmBLFdKELy','1');
 /*!40000 ALTER TABLE `usr` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-30 14:10:24
+-- Dump completed on 2019-08-07  8:33:51
