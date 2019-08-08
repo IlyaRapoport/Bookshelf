@@ -28,8 +28,9 @@ public class EditUserController {
     @PostMapping
     public String userSave(@RequestParam String password, @RequestParam String username, @RequestParam Map<String, String> form, @RequestParam("id") User user) {
         user.setUsername(username);
+        if (!password.isEmpty()){
         user.setPassword(password);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));}
         userRepo.save(user);
         return "redirect:/main";
     }

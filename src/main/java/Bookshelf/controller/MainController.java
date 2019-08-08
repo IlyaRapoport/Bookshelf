@@ -56,9 +56,9 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@AuthenticationPrincipal User user, Map<String, Object> model) {
+    public String main(@AuthenticationPrincipal User user, Map<String, Object> model) throws IOException {
         for (Role key : user.getRoles()) {
-            if (key.getAuthority().contains("STATISTIC")) {
+            if (key.getAuthority().equals("STATISTIC")) {
                 return "redirect:/statistic";
             }
         }
@@ -73,20 +73,65 @@ public class MainController {
         }
         File folder = new File("upload");
         String[] files = folder.list();
+        assert files != null;
         for (String file : files) {
-            String fileForDeleteName = file;
-            File fileForDelete = new File("upload/" + fileForDeleteName);
+            File fileForDelete = new File("upload/" + file);
+
             fileForDelete.delete();
         }
-         folder = new File("src/main/resources/upload");
+
+        folder = new File("src/main/resources/upload");
         files = folder.list();
         for (String file : files) {
-            String fileForDeleteName = file;
-            File fileForDelete = new File("src/main/resources/upload/" + fileForDeleteName);
+            File fileForDelete = new File("src/main/resources/upload/" + file);
             fileForDelete.delete();
         }
 
         return "main";
+    }
+
+    @GetMapping("/addfromfile")
+    public String addFromFile(@AuthenticationPrincipal User user) throws IOException {
+        File folder = new File("txt");
+        String[] files = folder.list();
+        assert files != null;
+        for (String file : files) {
+            File fileForReading = new File("txt/" + file);
+
+            if(fileForReading.getName().contains("txt")){
+
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileForReading));
+
+            StringBuffer stringBuffer = new StringBuffer();
+            String line = null;
+
+            while ((line = bufferedReader.readLine()) != null) {
+
+                stringBuffer.append(line).append("\n");
+            }
+
+            String[] words = null;
+            words = stringBuffer.toString().split("[\\n \\s]");
+
+            Map<String, String> stringToMap = new HashMap<>();
+            for (int i = 0; i < words.length; i = i + 2) {
+                stringToMap.put(words[i], words[i + 1]);
+            }
+            List<Books> books = bookRepo.findByBookName(stringToMap.get("bookName"));
+
+            if (books.size() == 0) {
+                String bookName = null;
+                String bookAuthor = null;
+                String bookDescription = null;
+                Books book = new Books(bookName, bookAuthor, user, bookDescription);
+                book.setBookName(stringToMap.get("bookName"));
+                book.setBookAuthor(stringToMap.get("bookAuthor"));
+                book.setBookDescription(stringToMap.get("bookDescription"));
+                book.setAuthor(user);
+                bookRepo.save(book);
+            }
+        }}
+        return "redirect:/main";
     }
 
     @GetMapping("/add")
@@ -97,7 +142,7 @@ public class MainController {
     }
 
     @GetMapping("books/download")
-    public String download( @AuthenticationPrincipal User user,Map<String, Object> model) throws IOException {
+    public String download(@AuthenticationPrincipal User user, Map<String, Object> model) throws IOException {
         if (pdfToEdit.size() != 0) {
 
             File someFile = new File("src/main/resources/upload/pdf.pdf");
@@ -106,12 +151,12 @@ public class MainController {
             fos.flush();
             fos.close();
         }
-        Integer bookId=booksToEdit.get(0).getId();
+        Integer bookId = booksToEdit.get(0).getId();
 
-        Date statDate= new Date();
-        Long userId=user.getId();
+        Date statDate = new Date();
+        Long userId = user.getId();
 
-        Statistic statistic = new Statistic( bookId,  statDate,  userId);
+        Statistic statistic = new Statistic(bookId, statDate, userId);
         statistic.setBookId(bookId);
         statistic.setStatDate(statDate);
         statistic.setUserId(userId);
@@ -161,7 +206,7 @@ public class MainController {
 
     @PostMapping("ad")
     public String ad(@RequestParam("filePDF") MultipartFile filePDF, @RequestParam("file") MultipartFile file, @AuthenticationPrincipal Integer id, @RequestParam String bookName, @RequestParam String bookDescription, @AuthenticationPrincipal User user, @RequestParam String bookAuthor, @RequestParam(defaultValue = "") String bookAuthorSelect, Map<String, Object> model) throws IOException, SQLException {
-        Books book = new Books(id, bookName, bookAuthor, user, bookDescription);
+        Books book = new Books(bookName, bookAuthor, user, bookDescription);
 
         if (bookAuthor != null && !bookAuthor.isEmpty()) {
             book.setBookAuthor(bookAuthor);
@@ -247,11 +292,12 @@ public class MainController {
         model.put("name", user.getUsername());
         Iterable<Books> books;
         if (filter != null && !filter.isEmpty()) {
-            books = bookRepo.findByBookName(filter);
+            books = bookRepo.findByBookName(Sort.by("bookName"), filter);
         } else {
             books = bookRepo.findAll();
         }
         model.put("books", books);
+        model.put("id", user.getId());
         for (Role key : user.getRoles()) {
             if (key.getAuthority().contains("ADMIN")) {
                 model.put("user", user);

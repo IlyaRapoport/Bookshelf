@@ -39,6 +39,7 @@
 <div><h1>User Editor</h1></div>
 
 <form action="/user" method="post" >
+    User <b>"{{user.username}}"</b> Role is:{{user.roles}}<br>
     Set new User Name:<input type="text" name="username" value="{{user.username}}"><br>
     Set new User Password:<input type="text" name="password"><br>
     <input type="hidden" name="id" value="{{user.id}}">

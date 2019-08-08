@@ -42,14 +42,21 @@ public class UserController {
     public String userSave(@RequestParam String password, @RequestParam String username, @RequestParam Map<String, String> form, @RequestParam("id") User user) {
         user.setUsername(username);
         Set<String> roles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
-        user.getRoles().clear();
+
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().clear();
+            }
+        }
         for (String key : form.keySet()) {
             if (roles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
-        user.setPassword(password);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!password.isEmpty()) {
+            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userRepo.save(user);
         return "redirect:/user";
     }

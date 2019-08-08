@@ -17,7 +17,6 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/statistic")
-@PreAuthorize("hasAuthority('STATISTIC')")
 
 public class StatisticController {
 

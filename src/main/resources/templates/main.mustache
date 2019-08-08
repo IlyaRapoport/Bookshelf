@@ -2,18 +2,21 @@
 <head>
     <style>
             @import "/static/style.css";
+
     </style>
-<meta content="/upload/logo.jpg"/>
+
+    <meta content="/upload/logo.jpg"/>
     <title>Bookshelf</title>
 </head>
 <body id="intro">
 <div>Hello, {{name}}!</div>
 <table>
-
     <tr>
         <td>
             <ul>
                 <li><a href="/add">Add Book</a></li>
+                <li><a href="/addfromfile">Add Book from folder</a></li>
+
 
                 {{#user}}
                     <li><a href="/user">User list</a></li>
@@ -21,15 +24,26 @@
                 {{/user}}
                 {{^user}}{{/user}}
                 <li><a href="/edit/{{id}}">Edit user:{{name}}</a></li>
+                <li><a href="/main">Back</a><br></li>
             </ul>
         </td>
 
         <td>
             <form method="post" action="filter">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-                <input type="text" name="filter"/>
+
+                    <input list="browsers" name="filter"/>
+                <datalist id="browsers" >
+                    {{#books}}
+                    <option value="{{bookName}}">{{/books}}
+                </datalist>
+
+                {{^books}}
+                {{/books}}
                 <button type="submit">Find</button>
             </form>
+
+
         </td>
         <td>
             <div align="right">

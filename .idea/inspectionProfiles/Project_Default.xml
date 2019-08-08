@@ -4,12 +4,14 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="5">
+          <list size="7">
             <item index="0" class="java.lang.String" itemvalue="@import" />
             <item index="1" class="java.lang.String" itemvalue="logo.jpg" />
             <item index="2" class="java.lang.String" itemvalue="{text}" />
             <item index="3" class="java.lang.String" itemvalue=".canvasjschart()" />
             <item index="4" class="java.lang.String" itemvalue="diagram(book,22)" />
+            <item index="5" class="java.lang.String" itemvalue="(condition){" />
+            <item index="6" class="java.lang.String" itemvalue="(roles" />
           </list>
         </value>
       </option>

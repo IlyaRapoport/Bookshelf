@@ -44,8 +44,8 @@ public class Books {
     public Books() {
     }
 
-    public Books(Integer id, String bookName, String bookAuthor, User user, String bookDescription) {
-        this.id = id;
+    public Books( String bookName, String bookAuthor, User user, String bookDescription) {
+
         this.author = user;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
