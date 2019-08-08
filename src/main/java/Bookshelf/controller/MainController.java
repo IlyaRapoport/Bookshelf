@@ -90,50 +90,6 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("/addfromfile")
-    public String addFromFile(@AuthenticationPrincipal User user) throws IOException {
-        File folder = new File("txt");
-        String[] files = folder.list();
-        assert files != null;
-        for (String file : files) {
-            File fileForReading = new File("txt/" + file);
-
-            if(fileForReading.getName().contains("txt")){
-
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileForReading));
-
-            StringBuffer stringBuffer = new StringBuffer();
-            String line = null;
-
-            while ((line = bufferedReader.readLine()) != null) {
-
-                stringBuffer.append(line).append("\n");
-            }
-
-            String[] words = null;
-            words = stringBuffer.toString().split("[\\n \\s]");
-
-            Map<String, String> stringToMap = new HashMap<>();
-            for (int i = 0; i < words.length; i = i + 2) {
-                stringToMap.put(words[i], words[i + 1]);
-            }
-            List<Books> books = bookRepo.findByBookName(stringToMap.get("bookName"));
-
-            if (books.size() == 0) {
-                String bookName = null;
-                String bookAuthor = null;
-                String bookDescription = null;
-                Books book = new Books(bookName, bookAuthor, user, bookDescription);
-                book.setBookName(stringToMap.get("bookName"));
-                book.setBookAuthor(stringToMap.get("bookAuthor"));
-                book.setBookDescription(stringToMap.get("bookDescription"));
-                book.setAuthor(user);
-                bookRepo.save(book);
-            }
-        }}
-        return "redirect:/main";
-    }
-
     @GetMapping("/add")
     public String add(Map<String, Object> model) {
         Iterable<Books> books = bookRepo.findAll(Sort.by("bookAuthor"));
@@ -310,6 +266,9 @@ public class MainController {
     public String del(@AuthenticationPrincipal Integer id, Map<String, Object> model) {
         Iterable<Books> books;
         Iterable<Comments> comments;
+
+        fileRepo.deleteAll(fileRepo.findByBookId(booksToEdit.get(0).getId()));
+        fileRepoPDF.deleteAll(fileRepoPDF.findByBookId(booksToEdit.get(0).getId()));
         if (commentsToEdit != null && commentsToEdit.size() != 0) {
             comments = commentsRepo.findByBookId(commentsToEdit.get(0).getBookId());
             commentsRepo.deleteAll(comments);
@@ -319,6 +278,7 @@ public class MainController {
 
             bookRepo.deleteAll(books);
         }
+
 
         return "redirect:/main";
     }

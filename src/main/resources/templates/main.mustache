@@ -2,7 +2,6 @@
 <head>
     <style>
             @import "/static/style.css";
-
     </style>
 
     <meta content="/upload/logo.jpg"/>
@@ -16,13 +15,12 @@
             <ul>
                 <li><a href="/add">Add Book</a></li>
                 <li><a href="/addfromfile">Add Book from folder</a></li>
-
-
                 {{#user}}
                     <li><a href="/user">User list</a></li>
                     <li><a href="/registration">Add new User</a></li>
                 {{/user}}
                 {{^user}}{{/user}}
+                <li><a href="/statistic">Statistic</a></li>
                 <li><a href="/edit/{{id}}">Edit user:{{name}}</a></li>
                 <li><a href="/main">Back</a><br></li>
             </ul>
@@ -32,8 +30,8 @@
             <form method="post" action="filter">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
 
-                    <input list="browsers" name="filter"/>
-                <datalist id="browsers" >
+                <input list="browsers" name="filter"/>
+                <datalist id="browsers">
                     {{#books}}
                     <option value="{{bookName}}">{{/books}}
                 </datalist>

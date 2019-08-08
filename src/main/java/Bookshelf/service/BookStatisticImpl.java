@@ -1,13 +1,13 @@
 package Bookshelf.service;
 
 import Bookshelf.domain.Statistic;
+import Bookshelf.repos.BookRepo;
 import Bookshelf.repos.StatisticRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -43,6 +43,8 @@ public class BookStatisticImpl implements BookStatistic {
 
     @Autowired
     private StatisticRepo statisticRepo;
+    @Autowired
+    private BookRepo bookRepo;
 
     @Override
     public List<Object> finishStaticCount(Date from, Date till) throws ParseException {
@@ -58,6 +60,7 @@ public class BookStatisticImpl implements BookStatistic {
         Map<String, Integer> statModel = new HashMap<>();
 
         Iterable<Statistic> statistic = statisticRepo.findAll(Sort.by("bookId"));
+
         for (Statistic statValue : statistic) {
 
             String key = statValue.getBookId().toString();
