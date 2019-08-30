@@ -52,7 +52,7 @@ public class FolderController {
 
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(fileForReading));
 
-                        StringBuffer stringBuffer = new StringBuffer();
+                        StringBuilder stringBuffer = new StringBuilder();
                         String line = null;
 
                         while ((line = bufferedReader.readLine()) != null) {
